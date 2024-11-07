@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GAS/Abilities/GA_Shoot.h"
 #include "Logging/LogMacros.h"
+#include "AbilitySystemComponent.h"
 #include "GASMultiplayerArenaCharacter.generated.h"
 
 class UInputComponent;
@@ -28,6 +30,10 @@ class AGASMultiplayerArenaCharacter : public ACharacter
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
+
+	// Ability system
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Mesh, meta = (AllowPrivateAccess = "true"))
+	UAbilitySystemComponent* AbilitySystemComponent;
 
 	/** Jump Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
@@ -66,6 +72,12 @@ public:
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+
+	UFUNCTION()
+	void GiveAbility(TSubclassOf<UGameplayAbility> AbilityClass);
+
+	UFUNCTION()
+	bool TryActivateAbilityWithClass(TSubclassOf<UGameplayAbility> AbilityClass, bool bAllowRemoteActivation);
 
 };
 

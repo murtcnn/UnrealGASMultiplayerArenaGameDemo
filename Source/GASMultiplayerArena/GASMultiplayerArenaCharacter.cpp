@@ -9,6 +9,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "TP_PickUpComponent.h"
 #include "Engine/LocalPlayer.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -35,6 +36,9 @@ AGASMultiplayerArenaCharacter::AGASMultiplayerArenaCharacter()
 	Mesh1P->CastShadow = false;
 	//Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
+
+	// Ability system
+	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 
 }
 
@@ -65,6 +69,17 @@ void AGASMultiplayerArenaCharacter::SetupPlayerInputComponent(UInputComponent* P
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+}
+
+void AGASMultiplayerArenaCharacter::GiveAbility(TSubclassOf<UGameplayAbility> AbilityClass)
+{
+	FGameplayAbilitySpec GameplayAbilitySpec(AbilityClass, 0, INDEX_NONE, nullptr);
+	AbilitySystemComponent->GiveAbility(GameplayAbilitySpec);
+}
+
+bool AGASMultiplayerArenaCharacter::TryActivateAbilityWithClass(TSubclassOf<UGameplayAbility> AbilityClass, bool bAllowRemoteActivation)
+{
+	return AbilitySystemComponent->TryActivateAbilityByClass(AbilityClass, true);
 }
 
 
