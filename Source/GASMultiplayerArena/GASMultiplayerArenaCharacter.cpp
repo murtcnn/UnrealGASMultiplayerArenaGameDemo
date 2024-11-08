@@ -11,6 +11,7 @@
 #include "InputActionValue.h"
 #include "TP_PickUpComponent.h"
 #include "Engine/LocalPlayer.h"
+#include "GAS/Attributes/AS_BaseAttributes.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -40,12 +41,25 @@ AGASMultiplayerArenaCharacter::AGASMultiplayerArenaCharacter()
 	// Ability system
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 
+	// Initialize the BaseAttributes.
+	if (AbilitySystemComponent)
+	{
+		BaseAttributes = CreateDefaultSubobject<UAS_BaseAttributes>(TEXT("AttributeSet"));
+		AbilitySystemComponent->AddAttributeSetSubobject(BaseAttributes);
+	}
+}
+
+UAbilitySystemComponent* AGASMultiplayerArenaCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
 }
 
 void AGASMultiplayerArenaCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	InitializeBaseAttributes();
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -80,6 +94,14 @@ void AGASMultiplayerArenaCharacter::GiveAbility(TSubclassOf<UGameplayAbility> Ab
 bool AGASMultiplayerArenaCharacter::TryActivateAbilityWithClass(TSubclassOf<UGameplayAbility> AbilityClass, bool bAllowRemoteActivation)
 {
 	return AbilitySystemComponent->TryActivateAbilityByClass(AbilityClass, true);
+}
+
+void AGASMultiplayerArenaCharacter::InitializeBaseAttributes()
+{
+	if (AbilitySystemComponent && BaseAttributes)
+	{
+		AbilitySystemComponent->InitStats(UAS_BaseAttributes::StaticClass(), nullptr);
+	}
 }
 
 

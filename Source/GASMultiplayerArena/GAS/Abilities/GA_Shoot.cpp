@@ -11,6 +11,11 @@
 
 class UTP_WeaponComponent;
 
+UGA_Shoot::UGA_Shoot()
+{
+	AbilityTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Weapon.Rifle")));
+}
+
 void UGA_Shoot::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
                                 const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {

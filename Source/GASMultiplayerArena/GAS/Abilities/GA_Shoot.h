@@ -17,6 +17,8 @@ class GASMULTIPLAYERARENA_API UGA_Shoot : public UGameplayAbility
 	GENERATED_BODY()
 
 private:
+	UGA_Shoot();
+	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
 	UPROPERTY()

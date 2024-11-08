@@ -25,7 +25,9 @@ void UTP_WeaponComponent::Fire()
 {
 	if (Character)
 	{
-		Character->TryActivateAbilityWithClass(UGA_Shoot::StaticClass(), true);
+		FGameplayTagContainer ShootAbilityTagContainer;
+		ShootAbilityTagContainer.AddTag(FGameplayTag::RequestGameplayTag(FName("Weapon.Rifle")));
+		Character->GetAbilitySystemComponent()->TryActivateAbilitiesByTag(ShootAbilityTagContainer, true);
 	}
 }
 
