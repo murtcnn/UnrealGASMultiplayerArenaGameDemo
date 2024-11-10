@@ -20,6 +20,10 @@ DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 AGASMultiplayerArenaCharacter::AGASMultiplayerArenaCharacter()
 {
+	// Replication
+	SetReplicates(true);
+	ACharacter::SetReplicateMovement(true);
+	
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
 		
@@ -40,7 +44,9 @@ AGASMultiplayerArenaCharacter::AGASMultiplayerArenaCharacter()
 
 	// Ability system
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
-
+	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
+	
 	// Initialize the BaseAttributes.
 	if (AbilitySystemComponent)
 	{

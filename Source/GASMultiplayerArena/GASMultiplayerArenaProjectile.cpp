@@ -1,6 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "GASMultiplayerArenaProjectile.h"
+
+#include "AbilitySystemComponent.h"
+#include "AbilitySystemInterface.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 
@@ -33,6 +36,18 @@ AGASMultiplayerArenaProjectile::AGASMultiplayerArenaProjectile()
 
 void AGASMultiplayerArenaProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	if (OtherActor && OtherActor->Implements<UAbilitySystemInterface>())
+	{
+		IAbilitySystemInterface* AbilitySystemInterface = Cast<IAbilitySystemInterface>(OtherActor);
+		if (AbilitySystemInterface)
+		{
+			UAbilitySystemComponent* Target_ASC = AbilitySystemInterface->GetAbilitySystemComponent();
+			UGameplayEffect* DamageEffect = DamageEffectClass->GetDefaultObject<UGameplayEffect>();
+			FActiveGameplayEffectHandle GameplayEffectHandle = Target_ASC->ApplyGameplayEffectToTarget(DamageEffect, Target_ASC, 0);
+		}
+	}
+
+	
 	// Only add impulse and destroy projectile if we hit a physics
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherComp->IsSimulatingPhysics())
 	{

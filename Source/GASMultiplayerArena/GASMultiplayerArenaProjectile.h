@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "GASMultiplayerArenaProjectile.generated.h"
 
+class UGameplayEffect;
 class USphereComponent;
 class UProjectileMovementComponent;
 
@@ -33,5 +34,9 @@ public:
 	USphereComponent* GetCollisionComp() const { return CollisionComp; }
 	/** Returns ProjectileMovement subobject **/
 	UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
+
+	// Abilities
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameplayEffects")
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
 };
 

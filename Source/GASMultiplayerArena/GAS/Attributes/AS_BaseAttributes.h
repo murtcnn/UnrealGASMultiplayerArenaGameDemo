@@ -22,18 +22,29 @@ class GASMULTIPLAYERARENA_API UAS_BaseAttributes : public UAttributeSet
 
 public:
 	UAS_BaseAttributes();
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
-	UPROPERTY(BlueprintReadOnly, Category = "Attributes")
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_Health)
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UAS_BaseAttributes, Health)
 
-	UPROPERTY(BlueprintReadOnly, Category = "Attributes")
+	UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_Mana)
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(UAS_BaseAttributes, Mana)
 
-	UPROPERTY(BlueprintReadOnly, Category = "Attributes")
+	UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_Strength)
 	FGameplayAttributeData Strength;
 	ATTRIBUTE_ACCESSORS(UAS_BaseAttributes, Strength)
 
-	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+	UFUNCTION()
+	virtual void OnRep_Health(const FGameplayAttributeData& OldHealth);
+
+	UFUNCTION()
+	virtual void OnRep_Mana(const FGameplayAttributeData& OldMana);
+
+	UFUNCTION()
+	virtual void OnRep_Strength(const FGameplayAttributeData& OldStrength);
 };
